@@ -15,7 +15,7 @@ def my_name():
 def put_header(output):
     print >> output, "version: 1"
     print >> output, "creator: " + my_name()
-    print >> output, "events: Bytes"
+    print >> output, "events: Bytes Count"
     print >> output
 
 def put_fn(fn, output):
@@ -29,15 +29,13 @@ def put_callee(child, output):
     print >> output, "cfn=" + child
     print >> output, "calls=1 0"
 
-# os.lstat('name').st_size
-
 def traverse_path(path, output):
-    my_weight = [0]
+    my_weight = [0,1]
     me = os.lstat(path)
     my_mode = me.st_mode
 
-    put_fn(path, output)
     if S_ISDIR(my_mode):
+        put_fn(path, output)
         put_weight(my_weight, output)
         for fn in os.listdir(path):
             child_path = os.path.join(path, fn)
@@ -48,6 +46,7 @@ def traverse_path(path, output):
             put_weight(child_weight, output)
     else:
         my_weight[0] += me.st_size or 0
+        put_fn(path, output)
         put_weight(my_weight, output)
     return my_weight
 

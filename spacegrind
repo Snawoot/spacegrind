@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import os.path
+from stat import *
+
+def usage():
+    print >> sys.stderr, "Usage: %s <DIRECTORY>" % (sys.argv[0],)
+    sys.exit(2)
+
+def my_name():
+    return os.path.splitext(os.path.basename(__file__))[0]
+
+def put_header(output):
+    print >> output, "version: 1"
+    print >> output, "creator: " + my_name()
+    print >> output, "events: Bytes"
+    print >> output
+
+def put_fn(fn, output):
+    print >> output
+    print >> output, "fn=" + fn
+
+def put_weight(weight, output):
+    print >> output, "0 " + " ".join(map(str,weight))
+
+def put_callee(child, output):
+    print >> output, "cfn=" + child
+    print >> output, "calls=1 0"
+
+# os.lstat('name').st_size
+
+def traverse_path(path, output):
+    my_weight = [0]
+    me = os.lstat(path)
+    my_mode = me.st_mode
+
+    put_fn(path, output)
+    if S_ISDIR(my_mode):
+        put_weight(my_weight, output)
+        for fn in os.listdir(path):
+            child_path = os.path.join(path, fn)
+            child_weight = traverse_path(child_path, output)
+            my_weight  = map(sum, zip(my_weight, child_weight))
+            put_fn(path, output)
+            put_callee(child_path, output)
+            put_weight(child_weight, output)
+    else:
+        my_weight[0] += me.st_size or 0
+        put_weight(my_weight, output)
+    return my_weight
+
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        usage()
+
+    root = sys.argv[1]
+    output = sys.stdout
+    put_header(output)
+    traverse_path(root, output)

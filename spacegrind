@@ -39,11 +39,15 @@ def traverse_path(path, output):
         put_weight(my_weight, output)
         for fn in os.listdir(path):
             child_path = os.path.join(path, fn)
-            child_weight = traverse_path(child_path, output)
-            my_weight  = map(sum, zip(my_weight, child_weight))
-            put_fn(path, output)
-            put_callee(child_path, output)
-            put_weight(child_weight, output)
+            try:
+                child_weight = traverse_path(child_path, output)
+            except:
+                pass
+            else:
+                my_weight  = map(sum, zip(my_weight, child_weight))
+                put_fn(path, output)
+                put_callee(child_path, output)
+                put_weight(child_weight, output)
     else:
         my_weight[0] += me.st_size or 0
         put_fn(path, output)

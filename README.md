@@ -23,3 +23,8 @@ Do the same thing and compress output on the fly:
 ## Compatibility
 
 Program output is known to be compatible with kcachegrind and qcachegrind.
+
+## Screenshots
+
+![kcachegrind](https://camo.githubusercontent.com/0c6de16aac2896a2ba9f7acdb1d66cfc617ff3a7/68747470733a2f2f66732e766d2d302e636f6d2f732f74446157484f3037384f7734554b742f646f776e6c6f6164)
+[Full size](https://camo.githubusercontent.com/0c6de16aac2896a2ba9f7acdb1d66cfc617ff3a7/68747470733a2f2f66732e766d2d302e636f6d2f732f74446157484f3037384f7734554b742f646f776e6c6f6164)

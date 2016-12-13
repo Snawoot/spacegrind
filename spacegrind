@@ -20,6 +20,7 @@ def put_header(output):
 
 def put_fn(fn, output):
     print >> output
+    print >> output, "fl=filesystem"
     print >> output, "fn=" + fn
 
 def put_weight(weight, output):
